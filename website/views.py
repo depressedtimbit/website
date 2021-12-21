@@ -19,8 +19,8 @@ def home():
 @views.route('/rcg/')
 def rcg():
 
-    font = ImageFont.truetype(font=r'home/ubuntu/website/websitestaticWhitney-Book.otf', size=22)
-    img = Image.open(r"home/ubuntu/website/websitestaticcuz_temp.png")
+    font = ImageFont.truetype(font=r'/home/ubuntu/website/website/static/Whitney-Book.otf', size=22)
+    img = Image.open(r"/home/ubuntu/website/website/static/cuz_temp.png")
     I1 = ImageDraw.Draw(img)
     random_text = get_bottom_string()
     I1.text(xy=(78, 34), text=random_text, fill="White", font=font)
