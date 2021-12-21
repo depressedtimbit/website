@@ -30,3 +30,6 @@ def rcg():
 
     return send_file(byte_io, mimetype='image/png')
 
+@views.route('/crsitamasagjk/')
+def xmas():
+    pass
