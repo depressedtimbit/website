@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+
+{% block meta %}
+<!--<meta property="og:title" content="Site Title" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://the-depressed.one" /> -->
+<meta property="og:image" content="http://3.18.225.102/static/xmasarc.gif" />
+<!-- <meta property="og:description" content="Site description" />
+<meta name="theme-color" content="#FF0000"> -->
+{% endblock %}
+
+{% block title %}
+xmas
+{% endblock %}
+
+{% block content %}
+<img src="\static\xmasarc.gif" alt="funny cat" style="width:128px;height:128px;">
+<a href="/">link text</a>
+<iframe id='iframe' frameborder="0" noresize="noresize"
+     style='background: transparent; width: 100%; height:100%;' src="{{ url_for('views.xmastimer', _=current_time)}}"></iframe>
+<script>
+    window.setInterval(function() {
+        reloadIFrame()
+    }, 1000);
+
+    function reloadIFrame() {
+        document.getElementById('iframe').contentWindow.location.reload();
+    }
+</script>
+{% endblock %}

@@ -1,8 +1,13 @@
 from typing import IO
-from flask import Blueprint, request, render_template, send_file
+from flask import Blueprint, request, render_template, send_file, Response
+import time
+import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
+
+from flask.helpers import total_seconds
+from werkzeug.wrappers import response
 
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
@@ -32,4 +37,15 @@ def rcg():
 
 @views.route('/crsitamasagjk/')
 def xmas():
-    pass
+    return render_template("xmas.html", )
+
+@views.route('/xmastimer')
+def xmastimer():
+    def countdown():
+        td = datetime.datetime(2021, 12, 25) - datetime.datetime.now()
+        hours = td.seconds // 3600
+        minutes = td.seconds // 60
+        
+        response = f"{td.days} days {hours} hours {minutes - hours * 60} minutes {td.seconds - minutes * 60} seconds"
+        return response
+    return Response(countdown(), mimetype='text/html') 
