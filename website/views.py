@@ -34,5 +34,8 @@ def rcg():
 
 @views.route('/crsitamasagjk/')
 def xmas():
-    return render_template("xmas.html", )
+    if datetime.datetime.now() > datetime.datetime(2021, 12, 25):
+        return '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/sUNKxsVONug?controls=0&amp&start=16&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+    else:
+        return render_template("xmas.html", )
 

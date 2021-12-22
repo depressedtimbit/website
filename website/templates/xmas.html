@@ -34,6 +34,10 @@ xmas
 
         var response = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
         timertext.textContent = response
+        
+        if(distance < 0) {
+            location.reload();
+        }
     }
 
     window.setInterval(function() {
