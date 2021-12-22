@@ -6,9 +6,6 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
 
-from flask.helpers import total_seconds
-from werkzeug.wrappers import response
-
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
     result_str = ''.join(random.choice(ascii_list) for i in range(5))
@@ -39,13 +36,3 @@ def rcg():
 def xmas():
     return render_template("xmas.html", )
 
-@views.route('/xmastimer')
-def xmastimer():
-    def countdown():
-        td = datetime.datetime(2021, 12, 25) - datetime.datetime.now()
-        hours = td.seconds // 3600
-        minutes = td.seconds // 60
-        
-        response = f"{td.days} days {hours} hours {minutes - hours * 60} minutes {td.seconds - minutes * 60} seconds"
-        return response
-    return Response(countdown(), mimetype='text/html') 

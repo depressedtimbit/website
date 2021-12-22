@@ -15,16 +15,29 @@ xmas
 
 {% block content %}
 <img src="\static\xmasarc.gif" alt="funny cat" style="width:128px;height:128px;">
-<a href="/">link text</a>
-<iframe id='iframe' frameborder="0" noresize="noresize"
-     style='background: transparent; width: 100%; height:100%;' src="{{ url_for('views.xmastimer', _=current_time)}}"></iframe>
+<p id=timertext></p>
+<img src="\static\xmasarc.gif" alt="funny cat" style="width:-128px;height:128px;">
 <script>
-    window.setInterval(function() {
-        reloadIFrame()
-    }, 1000);
+    var timertext = document.getElementById("timertext");
+    
+    var countDownDate = new Date(2021, 11, 25).getTime();
 
-    function reloadIFrame() {
-        document.getElementById('iframe').contentWindow.location.reload();
+    function setTimer() {
+        var now = new Date().getTime();
+
+        var distance = countDownDate - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 *24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        var response = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+        timertext.textContent = response
     }
+
+    window.setInterval(function() {
+        setTimer()
+    }, 1000);
 </script>
 {% endblock %}
