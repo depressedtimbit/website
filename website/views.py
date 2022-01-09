@@ -6,6 +6,8 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
 
+from werkzeug.utils import redirect
+
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
     result_str = ''.join(random.choice(ascii_list) for i in range(5))
@@ -31,6 +33,16 @@ def rcg():
     byte_io.seek(0)
 
     return send_file(byte_io, mimetype='image/png')
+
+@views.route('/toajjzwtajzwotatn/')
+def troll():
+
+    fun = random.randint(1, 10)
+
+    if fun == 25:
+        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    else:
+        return send_file(r"/home/ubuntu/website/website/static/qr.png")
 
 @views.route('/crsitamasagjk/')
 def xmas():
