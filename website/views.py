@@ -37,16 +37,16 @@ def rcg():
 @views.route('/toajjzwtajzwotatn/')
 def troll():
 
-    fun = random.randint(1, 10)
+    fun = random.randint(1, 5)
 
-    if fun == 25:
+    if fun == 5:
         return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     else:
         return send_file(r"/home/ubuntu/website/website/static/qr.png")
 
 @views.route('/crsitamasagjk/')
 def xmas():
-    if datetime.datetime.now() > datetime.datetime(2021, 12, 25):
+    if datetime.datetime.now() > datetime.datetime(2022, 12, 25):
         return '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/sUNKxsVONug?controls=0&amp&start=16&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     else:
         return render_template("xmas.html", )
