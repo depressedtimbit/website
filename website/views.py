@@ -1,3 +1,4 @@
+
 from flask import Blueprint, send_file, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Post
@@ -48,7 +49,6 @@ def delete_post():
             db.session.commit()
 
     return jsonify({})
-
 @views.route('/rcg/')
 def rcg():
 
