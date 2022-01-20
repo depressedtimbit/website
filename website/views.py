@@ -1,6 +1,9 @@
-from typing import IO
-from flask import Blueprint, request, render_template, send_file, Response
-import time
+
+from flask import Blueprint, send_file, render_template, request, flash, url_for
+from flask_login import login_required, current_user
+from .models import Post
+from . import db
+import json
 import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
@@ -18,6 +21,33 @@ views = Blueprint('views', __name__)
 @views.route('/')
 def home():
     return render_template("home.html", clientip=request.remote_addr)
+
+@views.route('/forum', methods=['GET', 'POST'])
+@login_required
+def Forum():
+    if request.method == 'POST':
+        post = request.form.get('post')
+
+        if len(post) < 1:
+            flash('post is too short!', category='error')
+        else:
+            new_post = Post(data=post, user_id=current_user.id)
+            db.session.add(new_post)
+            db.session.commit()
+            flash('post added!', category='success')
+
+    return render_template("forum.html", user=current_user)
+
+@views.route('/delete-post', methods=['POST'])
+def delete_post():
+    if request.method == 'POST':
+        postid = request.form.get('postid')
+        post = Post.query.get(int(postid))
+        if post:
+            if post.user_id == current_user.id:
+                db.session.delete(post)
+                db.session.commit()
+    return redirect(url_for('views.Forum'))
 
 @views.route('/rcg/')
 def rcg():
@@ -49,4 +79,3 @@ def xmas():
         return '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/sUNKxsVONug?controls=0&amp&start=16&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     else:
         return render_template("xmas.html", )
-

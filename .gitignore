@@ -4,4 +4,6 @@
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 virt/
+website/__pycache__/
 __pycache__/
+

@@ -12,6 +12,27 @@
 
         <title>{% block title %}Home{% endblock %}</title>
     </head>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div class="alert alter-dismissable popup" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% else %}
+      <div class="alert alter-dismissable popup" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+    {% block overlay %}
+    {% endblock %}
     <body> 
       
       <div class="header">
@@ -23,11 +44,17 @@
           style="width:100%; height: 100%;">
         </a> 
 
-        <div class="button-outter">
+        <div class="xmas-button-outter">
           <a href="/crsitamasagjk/" class="button-inner">
             christmas timer
           </a>
         </div>
+
+        <div class="forum-button-outter">
+          <a href="/forum" class="button-inner">
+            Forum
+          </a>
+        </div>        
       </div>
       
       <div class="mainbody">
@@ -35,4 +62,14 @@
         {% endblock %}
       </div>
     </body>
+
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  if ( window.history.replaceState ) {
+      window.history.replaceState( null, null, window.location.href );
+  }
+</script>
+{% block scripts %} {% endblock %}
 </html>
