@@ -1,21 +1,52 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
-    <h1 align="center">posts</h1>
-    <ul class="list-group list-group-flush" id="posts">
-      {% for post in user.posts %}
-      <li class="list-group-item">
-        {{ post.data }}
-        <button type="button" class="close" onClick="deletepost({{ post.id }})">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
-    <form method="POST">
-      <textarea name="post" id="post" class="form-control"></textarea>
-      <br />
-      <div align="center">
-        <button type="submit" class="btn btn-primary">Add post</button>
+{% extends "base.html" %} {% block title %}Forum{% endblock %} 
+
+
+{% block content %}
+
+<div class="forum-container1">
+  
+      <!--<div class="forum-endspacer"></div>-->
+      {% for Post in load_posts() %}
+      <div class="forum-post">
+        {{ Post.data }}
+
+        {% if Post.user_id == current_user.id %}
+        <script>
+          function deletePost(POST_ID) {
+            const formData = new FormData()
+            formData.set("postid", POST_ID)
+            fetch("/delete-post", {
+              method: "POST",
+              body: formData,
+            })
+              .then(() => window.location.reload())
+          }
+        </script>
+        <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
+        {% endif %}
+        
       </div>
-    </form>
-    {% endblock %}
+      <a>from {{ load_user(Post.user_id).username }} at {{ Post.date }}</a>
+      {% endfor %}
+      <a href="/forum">refresh</a>
+      <h1 align="center">posts</h1>
+
+</div>
+
+
+{% endblock %}
+
+{% block overlay %}
+
+<div class="post-overlay">
+    <form method="POST">
+        <textarea name="post" id="post" class="forum-text-area"></textarea>
+        <br />
+        <div align="center">
+          <button type="submit" class="btn btn-primary">Add post</button>
+        </div>
+      </form>
+    </div>
+</div>
+
+{% endblock %}

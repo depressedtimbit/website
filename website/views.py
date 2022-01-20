@@ -1,5 +1,5 @@
 
-from flask import Blueprint, send_file, render_template, request, flash, jsonify
+from flask import Blueprint, send_file, render_template, request, flash, url_for
 from flask_login import login_required, current_user
 from .models import Post
 from . import db
@@ -40,15 +40,15 @@ def Forum():
 
 @views.route('/delete-post', methods=['POST'])
 def delete_post():
-    post = json.loads(request.data)
-    postId = post['postId']
-    post = post.query.get(postId)
-    if post:
-        if post.user_id == current_user.id:
-            db.session.delete(post)
-            db.session.commit()
+    if request.method == 'POST':
+        postid = request.form.get('postid')
+        post = Post.query.get(int(postid))
+        if post:
+            if post.user_id == current_user.id:
+                db.session.delete(post)
+                db.session.commit()
+    return redirect(url_for('views.Forum'))
 
-    return jsonify({})
 @views.route('/rcg/')
 def rcg():
 

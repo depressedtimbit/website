@@ -31,6 +31,15 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
+    def load_post(id):
+        return Post.query.get(int(id))
+
+    def load_posts():
+        return Post.query.all()
+
+    app.jinja_env.globals.update(load_posts=load_posts, load_user=load_user)
+
+
     return app
 
 

@@ -10,11 +10,10 @@ class Post(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150))
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     posts = db.relationship('Post')
+
