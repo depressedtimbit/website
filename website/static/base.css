@@ -44,6 +44,16 @@
     justify-content: center;
     margin-left: 1%;
   }
+  .forum-button-outter {
+    background-image: linear-gradient(to left, grey, white, grey, white, grey);
+    padding: 1%;
+    border-radius: 6%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    margin-left: 1%;
+  }
   .button-inner {
     background-color: grey;
     color: white;
