@@ -78,4 +78,8 @@ def xmas():
     if datetime.datetime.now() > datetime.datetime(2022, 12, 25):
         return '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/sUNKxsVONug?controls=0&amp&start=16&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     else:
-        return render_template("xmas.html", )
+        return render_template("xmas.html")
+
+@views.route('/bloom-birthday')
+def bloom_birthday():
+    return render_template("birthdayburg.html")
