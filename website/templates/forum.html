@@ -8,8 +8,7 @@
       <!--<div class="forum-endspacer"></div>-->
       {% for Post in load_posts() %}
       <div class="forum-post">
-        {{ Post.data }}
-
+        <div class="post-text">{{ Post.data }}</div>
         {% if Post.user_id == current_user.id %}
         <script>
           function deletePost(POST_ID) {
@@ -22,15 +21,13 @@
               .then(() => window.location.reload())
           }
         </script>
-        <button onclick="deletePost({{ Post,id }})", class="delete-button">delete</button>
+        <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
         {% endif %}
-        
       </div>
       <a>from {{ load_user(Post.user_id).username }} at {{ Post.date }}</a>
       {% endfor %}
       <a href="/forum">refresh</a>
       <h1 align="center">posts</h1>
-
 </div>
 
 

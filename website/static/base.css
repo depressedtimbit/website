@@ -94,6 +94,12 @@
     min-height: 7vh;
     width: 30vw;
   }
+  .post-text {
+    color:white;
+    white-space: pre-line;
+    position: relative;
+    left: 0%;
+  }
   
   .forum-text-area {
     resize: none;
