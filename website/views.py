@@ -52,8 +52,8 @@ def delete_post():
 @views.route('/rcg/')
 def rcg():
 
-    font = ImageFont.truetype(font=r'/home/ubuntu/website/website/static/Whitney-Book.otf', size=22)
-    img = Image.open(r"/home/ubuntu/website/website/static/cuz_temp.png")
+    font = ImageFont.truetype(font=r'/var/www/website/website/static/Whitney-Book.otf', size=22)
+    img = Image.open(r"/var/www/website/website/static/cuz_temp.png")
     I1 = ImageDraw.Draw(img)
     random_text = get_bottom_string()
     I1.text(xy=(78, 34), text=random_text, fill="White", font=font)
@@ -71,7 +71,7 @@ def troll():
     if fun == 5:
         return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     else:
-        return send_file(r"/home/ubuntu/website/website/static/qr.png")
+        return send_file(r"/var/www/website/website/static/qr.png")
 
 @views.route('/crsitamasagjk/')
 def xmas():
