@@ -22,7 +22,7 @@
               .then(() => window.location.reload())
           }
         </script>
-        <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
+        <button onclick="deletePost({{ Post,id }})", class="delete-button">delete</button>
         {% endif %}
         
       </div>
@@ -40,9 +40,7 @@
 
 <div class="post-overlay">
     <form method="POST">
-        <textarea name="post" id="post" class="forum-text-area">
-  
-        </textarea>
+        <textarea name="post" id="post" class="forum-text-area"></textarea>
         <br />
         <div align="center">
           <button type="submit" class="btn btn-primary">Add post</button>
