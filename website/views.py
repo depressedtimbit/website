@@ -3,7 +3,6 @@ from flask import Blueprint, send_file, render_template, request, flash, url_for
 from flask_login import login_required, current_user
 from .models import Post
 from . import db
-import markdown
 import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
@@ -16,10 +15,6 @@ def get_bottom_string():
     result_str = ''.join(random.choice(ascii_list) for i in range(5))
     return result_str
 
-def parse_post(pre_parse):
-    post = markdown.markdown(pre_parse)
-    return post
-    
 views = Blueprint('views', __name__)
 
 @views.route('/')
