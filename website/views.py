@@ -1,14 +1,18 @@
 
-from flask import Blueprint, send_file, render_template, request, flash, url_for
+from pydoc import render_doc
+from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
 from flask_login import login_required, current_user
-from .models import Post
+from .models import Post, User
 from . import db
 import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
+import os
 
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
+
+STATIC_DIR = os.environ['STATIC_DIR']
 
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
@@ -36,13 +40,51 @@ def Forum():
 
     return render_template("forum.html", user=current_user)
 
+@views.route('/forum/user/<user_id>')
+@login_required
+def user(user_id=None):
+    if user_id == "me":
+        return render_template("user-page.html", user_id=current_user.id)
+    if user == None:
+        return render_template("user-page.html", user_id=current_user.id)
+    if User.query.get(int(user_id)) == None:
+        abort(404)
+    return render_template("user-page.html", user_id=user_id)
+
+@views.route('/forum/upload_pfp', methods = ['GET', 'POST'])
+@login_required
+def upload_file():
+  if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(url_for('views.user', user_id="me"))
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(url_for('views.user', user_id="me"))
+        if file:
+            ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+            filename = secure_filename(file.filename)
+            if filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS:
+                filename = filename.rsplit('.', 1)[1]
+                filename = f"{str(current_user.id)}.{filename}"
+                file.save(f'{STATIC_DIR}/pfps/custom/{filename}')
+                updateUser = User.query.filter_by(id=current_user.id).first()
+                updateUser.pfp = filename
+                db.session.add(updateUser)
+                db.session.commit()
+
+                return redirect(url_for('views.user', user_id="me"))
+
 @views.route('/delete-post', methods=['POST'])
 def delete_post():
     if request.method == 'POST':
         postid = request.form.get('postid')
         post = Post.query.get(int(postid))
         if post:
-            if post.user_id == current_user.id:
                 db.session.delete(post)
                 db.session.commit()
     return redirect(url_for('views.Forum'))
@@ -50,8 +92,8 @@ def delete_post():
 @views.route('/rcg/')
 def rcg():
 
-    font = ImageFont.truetype(font=r'/var/www/website/website/static/Whitney-Book.otf', size=22)
-    img = Image.open(r"/var/www/website/website/static/cuz_temp.png")
+    font = ImageFont.truetype(font=f'{STATIC_DIR}/Whitney-Book.otf', size=22)
+    img = Image.open(f'{STATIC_DIR}/cuz_temp.png')
     I1 = ImageDraw.Draw(img)
     random_text = get_bottom_string()
     I1.text(xy=(78, 34), text=random_text, fill="White", font=font)

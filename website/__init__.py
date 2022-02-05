@@ -1,22 +1,31 @@
-from flask import Flask
+from ast import Num
+from flask import Flask, render_template
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
+migrate = Migrate()
+
 
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'True'
     db.init_app(app)
-    import getpass
-    print(getpass.getuser())
+    migrate.init_app(app, db)
 
     from .views import views
     from .auth import auth
+
+    
+    @app.errorhandler(404)
+    def not_found(e):
+      return render_template("404.html")
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
@@ -36,10 +45,21 @@ def create_app():
     def load_post(id):
         return Post.query.get(int(id))
 
-    def load_posts():
-        return Post.query.all()
+    def load_posts(User : Num = None):
+        if User is None:
+            return Post.query.all()
+        else:
+            return Post.query.filter_by(user_id=User)
 
-    app.jinja_env.globals.update(load_posts=load_posts, load_user=load_user)
+    def load_pfp_dir(id : Num):
+        user = User.query.get(int(id))
+        if user.pfp == None:
+            return "\static\pfps\default-pfp.png"
+        else:
+            return f'\static\pfps\custom\{user.pfp}'
+
+            
+    app.jinja_env.globals.update(load_posts=load_posts, load_user=load_user, load_pfp_dir=load_pfp_dir, len=len)
 
 
     return app

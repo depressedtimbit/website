@@ -1,6 +1,6 @@
 from . import db
 from flask_login import UserMixin
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func 
 
 
 
@@ -16,4 +16,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     posts = db.relationship('Post')
-
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    pfp = db.Column(db.String(150), nullable=True)
+    bio = db.Column(db.String(150), nullable=True)
