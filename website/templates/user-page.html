@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}Forum{% endblock %} 
+
+
+{% block content %}
+
+<div class="forum-container1">
+  
+      <!--<div class="forum-endspacer"></div>-->
+      {% for Post in load_posts(user_id)%}
+      <div class="forum-post">
+        <div class="post-text">{{ Post.data }}</div>
+        {% if Post.user_id == current_user.id %}
+        <script>
+          function deletePost(POST_ID) {
+            const formData = new FormData()
+            formData.set("postid", POST_ID)
+            fetch("/delete-post", {
+              method: "POST",
+              body: formData,
+            })
+              .then(() => window.location.reload())
+          }
+        </script>
+        <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
+        {% endif %}
+      </div>
+      <a>from {{ load_user(Post.user_id).username }} at {{ Post.date }}</a>
+      {% endfor %}
+      <a href="/forum">refresh</a>
+      <a align="center">{{ load_user(user_id).username }}'s posts</a>
+      <div class="user-profile">
+        <h1>{{ load_user(user_id).username }}</h1>
+        <img src={{ load_pfp_dir(user_id) }} style="width: 20%; height:auto">
+        {% if user_id == current_user.id %}
+        <form action="/forum/upload_pfp" method = "POST"
+          enctype = "multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit">
+        </form>
+        {% endif %}
+        <div class="user-profile-stats">
+          <a>Created on: {{ load_user(user_id).date }}</a>
+          <a>{{ len(load_user(user_id).posts) }} Posts</a>
+        </div>
+      </div>
+      
+</div>
+
+
+{% endblock %}
