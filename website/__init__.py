@@ -22,7 +22,8 @@ def create_app():
     from .views import views
     from .auth import auth
 
-    
+    import getpass
+    print(getpass.getuser())
     @app.errorhandler(404)
     def not_found(e):
       return render_template("404.html")
