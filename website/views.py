@@ -12,7 +12,10 @@ import os
 
 from werkzeug.utils import redirect, secure_filename
 
-STATIC_DIR = os.environ['STATIC_DIR']
+if os.environ['STATIC_DIR'] == None:
+    STATIC_DIR = "/var/www/website/website/static/"
+else:
+    STATIC_DIR = os.environ['STATIC_DIR']
 
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
