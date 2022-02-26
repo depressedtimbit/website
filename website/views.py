@@ -1,5 +1,6 @@
 
 from pydoc import render_doc
+from turtle import bye
 from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
 from flask_login import login_required, current_user
 from .models import Post, User
@@ -12,11 +13,9 @@ import os
 
 from werkzeug.utils import redirect, secure_filename
 
-if "STATIC_DIR" in os.environ:
-    STATIC_DIR = os.environ['STATIC_DIR']
-else:
-    STATIC_DIR = "/var/www/website/website/static/"
-    
+import website
+
+STATIC_DIR = os.path.join(os.getcwd(), 'website', 'static')
 
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
@@ -106,6 +105,11 @@ def rcg():
     byte_io.seek(0)
 
     return send_file(byte_io, mimetype='image/png')
+
+@views.route('/valhallamodfile')
+def vallhallmodfile():
+    
+    return send_file(f'{STATIC_DIR}/data_working19_final.win')
 
 @views.route('/toajjzwtajzwotatn/')
 def troll():
