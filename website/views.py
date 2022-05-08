@@ -131,7 +131,3 @@ def xmas():
 @views.route('/bloom-birthday')
 def bloom_birthday():
     return render_template("birthdayburg.html")
-
-@views.route('.well-known')
-def wellknow():
-    return send_from_directory('/var/www/html')
