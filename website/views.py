@@ -1,7 +1,7 @@
 
 from pydoc import render_doc
 from turtle import bye
-from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
+from flask import Blueprint, send_file, render_template, request, flash, send_from_directory, url_for, abort
 from flask_login import login_required, current_user
 from .models import Post, User
 from . import db
@@ -131,3 +131,7 @@ def xmas():
 @views.route('/bloom-birthday')
 def bloom_birthday():
     return render_template("birthdayburg.html")
+
+@views.route('.well-known')
+def wellknow():
+    return send_from_directory('/var/www/html')

@@ -7,3 +7,12 @@ virt/
 website/__pycache__/
 __pycache__/
 website/database.db
+obj/Any CPU/Debug/website.pyproj.FileListAbsolute.txt
+.vs/website/v17/fileList.bin
+website.pyproj
+website.pyproj.user
+.vs/ProjectSettings.json
+.vs/PythonSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/website/v17/.suo
