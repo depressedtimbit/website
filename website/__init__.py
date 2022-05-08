@@ -1,6 +1,6 @@
 from ast import Num
 from flask import Flask, render_template
-from Flask_Migrate import Migrate
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
