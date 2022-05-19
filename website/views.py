@@ -15,7 +15,7 @@ from werkzeug.utils import redirect, secure_filename
 
 import website
 
-STATIC_DIR = os.path.join(os.getcwd(), 'website', 'static')
+STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
 
 def get_bottom_string():
     ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
