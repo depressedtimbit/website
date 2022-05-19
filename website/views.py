@@ -1,7 +1,8 @@
 
 from pydoc import render_doc
 from turtle import bye
-from flask import Blueprint, send_file, render_template, request, flash, send_from_directory, url_for, abort
+from urllib import response
+from flask import Blueprint, make_response, send_file, render_template, request, flash, send_from_directory, url_for, abort
 from flask_login import login_required, current_user
 from .models import Post, User
 from . import db
@@ -94,8 +95,6 @@ def delete_post():
 
 @views.route('/rcg/')
 def rcg():
-    print(os.getcwd())
-    print(f'{STATIC_DIR}/Whitney-Book.otf')
     font = ImageFont.truetype(font=f'{STATIC_DIR}/Whitney-Book.otf', size=22)
     img = Image.open(f'{STATIC_DIR}/cuz_temp.png')
     I1 = ImageDraw.Draw(img)
@@ -105,7 +104,9 @@ def rcg():
     img.save(byte_io, 'PNG')
     byte_io.seek(0)
 
-    return send_file(byte_io, mimetype='image/png')
+    response = make_response(send_file(byte_io, mimetype='image/png'))
+    response.headers["Cache-Control"] = "no-store"
+    return  response
 
 @views.route('/valhallamodfile')
 def vallhallmodfile():
