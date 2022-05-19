@@ -94,7 +94,7 @@ def delete_post():
 
 @views.route('/rcg/')
 def rcg():
-    os.getcwd()
+    print(os.getcwd())
     print(f'{STATIC_DIR}/Whitney-Book.otf')
     font = ImageFont.truetype(font=f'{STATIC_DIR}/Whitney-Book.otf', size=22)
     img = Image.open(f'{STATIC_DIR}/cuz_temp.png')
