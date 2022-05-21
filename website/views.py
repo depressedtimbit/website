@@ -185,7 +185,7 @@ def whosthatpokemon():
     pokemon_light = ImageEnhance.Brightness(pokemon)
     pokemon_dark = pokemon_light.enhance(0)
 
-    background = Image.open(f'{STATIC_DIR}\pokemon\whos-that-pokemon.jpg')
+    background = Image.open(f'{STATIC_DIR}/pokemon/whos-that-pokemon.jpg')
     background = background.convert("RGBA")
 
     background.paste(pokemon_dark, (88, 45), pokemon_dark)
