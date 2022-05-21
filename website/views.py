@@ -148,12 +148,13 @@ def pokemon():
 
     jarImg = Image.open(f'{STATIC_DIR}/pokemon/jar.png')
 
-    img = Image.new("RGBA", size=(2000, 2000))
+    img = Image.new("RGBA", size=(500, 500))
 
-    pokemon = pokemon.resize((1055, 1055), resample=Image.LANCZOS)
+    pokemon = pokemon.resize((263, 263), resample=Image.LANCZOS)
+    jarImg = jarImg.resize((445, 500), resample=Image.LANCZOS)
 
-    img.paste(pokemon, (458, 622))
-    img.paste(jarImg, (110, 0), jarImg)
+    img.paste(pokemon, (115, 156))
+    img.paste(jarImg, (28, 0), jarImg)
     
     byte_io = BytesIO()
     img.save(byte_io, 'PNG')
