@@ -1,12 +1,13 @@
 from email.mime import image
 import re
+from turtle import back
 from flask import Blueprint, make_response, send_file, render_template, request, flash, url_for, abort
 from flask_login import login_required, current_user
 from .models import Post, User
 from . import db
 import datetime
 import urllib.request
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from io import BytesIO
 import random
 import os
@@ -115,12 +116,16 @@ def vallhallmodfile():
 @views.route('/toajjzwtajzwotatn/')
 def troll():
 
-    fun = random.randint(1, 5)
+    fun = random.randint(0, 5)
 
-    if fun == 5:
+    if fun == 4:
+        return redirect("https://www.youtube.com/watch?v=yPYZpwSpKmA")
+    elif fun == 5:
         return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     else:
         return send_file(os.path.join(f"{STATIC_DIR}", "qr.png"))
+
+
 
 @views.route('/crsitamasagjk/')
 def xmas():
@@ -158,6 +163,35 @@ def pokemon():
     
     byte_io = BytesIO()
     img.save(byte_io, 'PNG')
+    byte_io.seek(0)
+
+    response = make_response(send_file(byte_io, mimetype='image/png'))
+    response.headers["Cache-Control"] = "no-store"
+    return  response
+
+@views.route('/whos-that-pokemon/')
+def whosthatpokemon():
+    random_pokemon = random.randint(0, 905)
+    random_pokemon = str(random_pokemon).rjust(3, "0")
+    
+    random_pokemon_url = f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{random_pokemon}.png"
+    with urllib.request.urlopen(random_pokemon_url) as url:
+        pokemon_file = BytesIO(url.read())
+    
+    pokemon = Image.open(pokemon_file)
+
+    pokemon = pokemon.convert("RGBA")
+
+    pokemon_light = ImageEnhance.Brightness(pokemon)
+    pokemon_dark = pokemon_light.enhance(0)
+
+    background = Image.open(f'{STATIC_DIR}\pokemon\whos-that-pokemon.jpg')
+    background = background.convert("RGBA")
+
+    background.paste(pokemon_dark, (88, 45), pokemon_dark)
+ 
+    byte_io = BytesIO()
+    background.save(byte_io, 'PNG')
     byte_io.seek(0)
 
     response = make_response(send_file(byte_io, mimetype='image/png'))
