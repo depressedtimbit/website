@@ -1,12 +1,11 @@
-
-from pydoc import render_doc
-from turtle import bye
-from urllib import response
-from flask import Blueprint, make_response, send_file, render_template, request, flash, send_from_directory, url_for, abort
+from email.mime import image
+import re
+from flask import Blueprint, make_response, send_file, render_template, request, flash, url_for, abort
 from flask_login import login_required, current_user
 from .models import Post, User
 from . import db
 import datetime
+import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
@@ -121,7 +120,7 @@ def troll():
     if fun == 5:
         return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     else:
-        return send_file(r"/var/www/website/website/static/qr.png")
+        return send_file(os.path.join(f"{STATIC_DIR}", "qr.png"))
 
 @views.route('/crsitamasagjk/')
 def xmas():
@@ -133,3 +132,33 @@ def xmas():
 @views.route('/bloom-birthday')
 def bloom_birthday():
     return render_template("birthdayburg.html")
+
+@views.route('/pokemon/')
+def pokemon():
+    random_pokemon = random.randint(0, 905)
+    random_pokemon = str(random_pokemon).rjust(3, "0")
+    
+    random_pokemon_url = f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{random_pokemon}.png"
+    with urllib.request.urlopen(random_pokemon_url) as url:
+        pokemon_file = BytesIO(url.read())
+    
+    pokemon = Image.open(pokemon_file)
+
+    pokemon = pokemon.convert("RGBA")
+
+    jarImg = Image.open(f'{STATIC_DIR}/pokemon/jar.png')
+
+    img = Image.new("RGBA", size=(2000, 2000))
+
+    pokemon = pokemon.resize((1055, 1055), resample=Image.LANCZOS)
+
+    img.paste(pokemon, (458, 622))
+    img.paste(jarImg, (110, 0), jarImg)
+    
+    byte_io = BytesIO()
+    img.save(byte_io, 'PNG')
+    byte_io.seek(0)
+
+    response = make_response(send_file(byte_io, mimetype='image/png'))
+    response.headers["Cache-Control"] = "no-store"
+    return  response
