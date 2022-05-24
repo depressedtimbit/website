@@ -1,6 +1,8 @@
 from ast import Num
+from distutils.command.config import config
 from flask import Flask, render_template
 from flask_migrate import Migrate
+from flask_caching import Cache
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -8,6 +10,7 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 DB_NAME = "database.db"
 migrate = Migrate()
+cache = Cache()
 
 
 
@@ -16,12 +19,15 @@ def create_app():
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'True'
+    app.config["CACHE_TYPE"] = "SimpleCache"
+    app.config["CACHE_DEFAULT_TIMEOUT"] = 300
     db.init_app(app)
     migrate.init_app(app, db)
+    cache.init_app(app)
 
     from .views import views
     from .auth import auth
-
+    
     import getpass
     print(getpass.getuser())
     @app.errorhandler(404)
