@@ -12,7 +12,7 @@ DB_NAME = "database.db"
 migrate = Migrate()
 cache = Cache()
 
-
+website_url = 'checkhost.local:5000'
 
 def create_app():
     app = Flask(__name__)
@@ -21,13 +21,15 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'True'
     app.config["CACHE_TYPE"] = "SimpleCache"
     app.config["CACHE_DEFAULT_TIMEOUT"] = 300
+    app.config['SERVER_NAME'] = website_url
     db.init_app(app)
     migrate.init_app(app, db)
     cache.init_app(app)
 
     from .views import views
     from .auth import auth
-    
+    from .api1 import api
+
     import getpass
     print(getpass.getuser())
     @app.errorhandler(404)
@@ -36,6 +38,7 @@ def create_app():
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(api, url_prefix='/v1')
 
     from .models import User, Post
 

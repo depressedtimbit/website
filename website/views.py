@@ -202,7 +202,8 @@ def whosthatpokemon():
     response.headers["Cache-Control"] = "no-store"
     return  response
 
-@views.route('/the/<path:parseurl>')
+##  deprecated due to performance ##
+"""@views.route('/the/<path:parseurl>')
 def the(parseurl):
 
     tempdir = tempfile.mkdtemp(prefix="test-dir-")
@@ -259,3 +260,4 @@ def the(parseurl):
     ffmpeg.run(stream), 500
     
     return send_file(video, mimetype="video/MP4")
+    """

@@ -24,9 +24,10 @@
         <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
         {% endif %}
       </div>
-      <a>from {{ load_user(Post.user_id).username }} at {{ Post.date }}</a>
+      <a>from {{ load_user(Post.user_id).username }} at {{ Post.creation_date }}</a>
+      <img src={{ load_pfp_dir(Post.user_id) }} style="width: 20%; height:auto">
       {% endfor %}
-      <a href="/forum">refresh</a>
+      <a href=urlfor()>refresh</a>
       <h1 align="center">posts</h1>
 </div>
 
