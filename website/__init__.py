@@ -1,4 +1,4 @@
-from ast import Num
+from typing import Optional
 from distutils.command.config import config
 from flask import Flask, render_template
 from flask_migrate import Migrate
@@ -30,8 +30,7 @@ def create_app():
     from .auth import auth
     from .api1 import api
 
-    import getpass
-    print(getpass.getuser())
+    # TODO: move to somewhere outside
     @app.errorhandler(404)
     def not_found(e):
       return render_template("404.html")
@@ -49,28 +48,27 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
+    def load_user(id_):
+        return User.query.get(int(id_))
 
-    def load_post(id):
-        return Post.query.get(int(id))
+    # FIXME: unused view?
+    def load_post(id_):
+        return Post.query.get(int(id_))
 
-    def load_posts(User : Num = None):
-        if User is None:
+    def load_posts(user: Optional[int]):
+        if user is None:
             return Post.query.all()
         else:
-            return Post.query.filter_by(user_id=User)
+            return Post.query.filter_by(user_id=user)
 
-    def load_pfp_dir(id : Num):
-        user = User.query.get(int(id))
+    def load_pfp_dir(id_):
+        user = User.query.get(int(id_))
         if user.pfp == None:
-            return "\static\pfps\default-pfp.png"
+            return "/static/pfps/default-pfp.png"
         else:
-            return f'\static\pfps\custom\{user.pfp}'
+            return f'/static/pfps/custom/{user.pfp}'
 
-            
     app.jinja_env.globals.update(load_posts=load_posts, load_user=load_user, load_pfp_dir=load_pfp_dir, len=len)
-
 
     return app
 
