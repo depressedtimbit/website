@@ -1,32 +1,19 @@
-from asyncio import wait_for
-from genericpath import exists
-import re
-import tempfile
-import uuid
-from flask import Blueprint, make_response, send_file, render_template, request, flash, url_for, abort
+from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
+from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
+from website.utils import get_image, image_response, get_bottom_string
 from .models import Post, User
 from . import db
 from . import cache
 import datetime
-import urllib.request
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
-import ffmpeg
-from pytube import YouTube
-from io import BytesIO
 import random
 import os
 
-from werkzeug.utils import redirect, secure_filename
-
-import website
-
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
-
-def get_bottom_string():
-    ascii_list = ['vdsdhh', 'hasj', 'xcvhr', 'hjjghf', 'nhas', 'djfn', 'gdxj', 'f', ' god ', 'ja', ' fd', ' gaihjs']
-    result_str = ''.join(random.choice(ascii_list) for i in range(5))
-    return result_str
+POKEMON_URL = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{}.png"
+WHITNEY_BOOK_FONT = ImageFont.truetype(f'{STATIC_DIR}/Whitney-Book.otf', 22)
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 views = Blueprint('views', __name__)
 
@@ -40,7 +27,7 @@ def home():
 def Forum():
     if request.method == 'POST':
         post = request.form.get('post')
-        if len(post) < 1:
+        if post is None or len(post) < 1:
             flash('post is too short!', category='error')
         else:
             new_post = Post(data=post, user_id=current_user.id)
@@ -55,16 +42,14 @@ def Forum():
 def user(user_id=None):
     if user_id == "me":
         return render_template("user-page.html", user_id=current_user.id)
-    if user == None:
-        return render_template("user-page.html", user_id=current_user.id)
-    if User.query.get(int(user_id)) == None:
+    if User.query.get(int(user_id)) is None:
         abort(404)
     return render_template("user-page.html", user_id=user_id)
 
 @views.route('/forum/upload_pfp', methods = ['GET', 'POST'])
 @login_required
 def upload_file():
-  if request.method == 'POST':
+    if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -75,8 +60,7 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(url_for('views.user', user_id="me"))
-        if file:
-            ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+        if file and file.filename:
             filename = secure_filename(file.filename)
             if filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS:
                 filename = filename.rsplit('.', 1)[1]
@@ -91,37 +75,30 @@ def upload_file():
 
 @views.route('/delete-post', methods=['POST'])
 def delete_post():
-    if request.method == 'POST':
-        postid = request.form.get('postid')
-        post = Post.query.get(int(postid))
+    post_id = request.form.get('postid')
+    if post_id is not None:
+        post = Post.query.get(int(post_id))
         if post:
-                db.session.delete(post)
-                db.session.commit()
+            db.session.delete(post)
+            db.session.commit()
     return redirect(url_for('views.Forum'))
 
 @views.route('/rcg/')
 def rcg():
-    font = ImageFont.truetype(font=f'{STATIC_DIR}/Whitney-Book.otf', size=22)
+    seed = request.args.get('seed', None, type=int)
     img = Image.open(f'{STATIC_DIR}/cuz_temp.png')
-    I1 = ImageDraw.Draw(img)
-    random_text = get_bottom_string()
-    I1.text(xy=(78, 34), text=random_text, fill="White", font=font)
-    byte_io = BytesIO()
-    img.save(byte_io, 'PNG')
-    byte_io.seek(0)
+    canvas = ImageDraw.Draw(img)
+    string = get_bottom_string(seed)
+    canvas.text((78, 34), string, 'white', WHITNEY_BOOK_FONT)
 
-    response = make_response(send_file(byte_io, mimetype='image/png'))
-    response.headers["Cache-Control"] = "no-store"
-    return  response
+    return image_response(img)
 
 @views.route('/valhallamodfile')
 def vallhallmodfile():
-    
     return send_file(f'{STATIC_DIR}/data_working19_final.win')
 
 @views.route('/toajjzwtajzwotatn/')
 def troll():
-
     fun = random.randint(0, 5)
 
     if fun == 4:
@@ -144,63 +121,33 @@ def bloom_birthday():
 
 @views.route('/pokemon/')
 def pokemon():
-    random_pokemon = random.randint(0, 905)
-    random_pokemon = str(random_pokemon).rjust(3, "0")
-    
-    random_pokemon_url = f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{random_pokemon}.png"
-    with urllib.request.urlopen(random_pokemon_url) as url:
-        pokemon_file = BytesIO(url.read())
-    
-    pokemon = Image.open(pokemon_file)
+    pokemon = get_image(POKEMON_URL.format('%03d' % random.randint(0, 905)))
+    pokemon = pokemon.convert('RGBA').resize((263, 263), resample=Image.LANCZOS)
 
-    pokemon = pokemon.convert("RGBA")
+    img = Image.new("RGBA", (500, 500))
 
     jarImg = Image.open(f'{STATIC_DIR}/pokemon/jar.png')
-
-    img = Image.new("RGBA", size=(500, 500))
-
-    pokemon = pokemon.resize((263, 263), resample=Image.LANCZOS)
     jarImg = jarImg.resize((445, 500), resample=Image.LANCZOS)
 
     img.paste(pokemon, (115, 156))
     img.paste(jarImg, (28, 0), jarImg)
-    
-    byte_io = BytesIO()
-    img.save(byte_io, 'PNG')
-    byte_io.seek(0)
 
-    response = make_response(send_file(byte_io, mimetype='image/png'))
-    response.headers["Cache-Control"] = "no-store"
-    return  response
+    return image_response(img)
 
 @views.route('/whos-that-pokemon/')
 def whosthatpokemon():
-    random_pokemon = random.randint(0, 905)
-    random_pokemon = str(random_pokemon).rjust(3, "0")
-    
-    random_pokemon_url = f"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{random_pokemon}.png"
-    with urllib.request.urlopen(random_pokemon_url) as url:
-        pokemon_file = BytesIO(url.read())
-    
-    pokemon = Image.open(pokemon_file)
-
-    pokemon = pokemon.convert("RGBA")
+    pokemon = get_image(POKEMON_URL.format('%03d' % random.randint(0, 905)))
+    pokemon = pokemon.convert('RGBA')
 
     pokemon_light = ImageEnhance.Brightness(pokemon)
     pokemon_dark = pokemon_light.enhance(0)
 
     background = Image.open(f'{STATIC_DIR}/pokemon/whos-that-pokemon.jpg')
-    background = background.convert("RGBA")
+    background = background.convert('RGBA')
 
     background.paste(pokemon_dark, (88, 45), pokemon_dark)
- 
-    byte_io = BytesIO()
-    background.save(byte_io, 'PNG')
-    byte_io.seek(0)
 
-    response = make_response(send_file(byte_io, mimetype='image/png'))
-    response.headers["Cache-Control"] = "no-store"
-    return  response
+    return image_response(background)
 
 ##  deprecated due to performance ##
 """@views.route('/the/<path:parseurl>')
