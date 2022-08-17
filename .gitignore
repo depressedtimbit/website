@@ -17,3 +17,4 @@ website.pyproj.user
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
 .vs/website/v17/.suo
+config.env

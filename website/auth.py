@@ -12,12 +12,14 @@ auth = Blueprint('auth', __name__)
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
+        print(username)
         password = request.form.get('password')
+        print(password)
         if not username or not password:
             flash('no username or password provided', 'error')
         else:
-            user = User.query.filter_by(username=username).first()
-            if not user:
+            user = User.query.filter_by(username=str(username)).first()
+            if user:
                 if check_password_hash(user.password, password):
                     flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)

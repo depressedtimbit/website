@@ -1,12 +1,18 @@
-.forum-container1 {
+  .forum-container1 {
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column-reverse;
-    overflow-y: auto;
-    overflow-x: hidden;
+  }
+  .forum-container2 {
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
   }
   .forum-post {
     background-color: grey;
