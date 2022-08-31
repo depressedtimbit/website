@@ -1,20 +1,21 @@
 from typing import Optional
-from distutils.command.config import config
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_caching import Cache
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from flask_socketio import SocketIO
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
 migrate = Migrate()
 cache = Cache()
+socketio = SocketIO()
 
 website_url = 'checkhost.local:5000'
 
-def create_app():
+def Create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
@@ -25,10 +26,12 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     cache.init_app(app)
+    socketio.init_app(app)
 
     from .views import views
     from .auth import auth
     from .api1 import api
+    from .knucklebones import bones
 
     # TODO: move to somewhere outside
     @app.errorhandler(404)
@@ -38,6 +41,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(api, url_prefix='/v1')
+    app.register_blueprint(bones, url_prefix="/knucklebones")
 
     from .models import User, Post
 

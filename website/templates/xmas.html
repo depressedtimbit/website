@@ -19,8 +19,10 @@ xmas
 <img src="\static\xmasarc.gif" alt="funny cat" style="max-width:25%; height:auto">
 <script>
     var timertext = document.getElementById("timertext");
-    
-    var countDownDate = new Date(2022, 11, 25).getTime();
+
+    var countDownYear = new Date().getFullYear();
+    var countDownDate = new Date(countDownYear, 11, 25).getTime();
+
 
     function setTimer() {
         var now = new Date().getTime();

@@ -1,0 +1,9 @@
+.knc-lobby-container {
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}

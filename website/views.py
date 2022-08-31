@@ -2,9 +2,11 @@ from flask import Blueprint, send_file, render_template, request, flash, url_for
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
 from website.utils import get_image, image_response, get_bottom_string
+from flask_socketio import  emit, join_room, leave_room
 from .models import Post, User
 from . import db
 from . import cache
+from . import socketio
 import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 import random
