@@ -1,7 +1,8 @@
+from turtle import width
 from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
-from website.utils import get_image, image_response, get_bottom_string
+from website.utils import get_image, image_response, get_bottom_string, get_brisket_string
 from .models import Post, User
 from . import db
 from . import cache
@@ -13,6 +14,7 @@ import os
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
 POKEMON_URL = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{}.png"
 WHITNEY_BOOK_FONT = ImageFont.truetype(f'{STATIC_DIR}/Whitney-Book.otf', 22)
+BRISKET_FONT = ImageFont.truetype(os.path.join(STATIC_DIR, "Brisket font.otf"), 70)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 views = Blueprint('views', __name__)
@@ -149,6 +151,44 @@ def whosthatpokemon():
 
     return image_response(background)
 
+@views.route("/brisket/")
+def brisket():
+    width = 500
+    height = 500
+    brisketimg = random.choice(os.listdir(os.path.join(STATIC_DIR, "briskets")))
+    brisketimg = Image.open(os.path.join(STATIC_DIR, "briskets", brisketimg))
+    brisketimg = brisketimg.convert('RGBA').resize((width, height), resample=Image.LANCZOS)
+
+    img = Image.new("RGBA", (width, height))
+    pink = Image.new(mode = "RGBA", size = (width, height),
+                                                color = (247, 29, 218, 50))
+
+    img.paste(brisketimg)
+    img.paste(pink, mask=pink)
+
+    canvas = ImageDraw.Draw(img)
+    string = get_brisket_string()
+    w, h = canvas.textsize(string + "<3" , BRISKET_FONT)
+    h += int(h*0.21)
+
+    canvas.text(((width-w)/2, ((height/3)-(h))/2), string + "<3", font=BRISKET_FONT, fill="pink", stroke_fill="black", stroke_width=2)
+
+    for _ in range(random.randint(5, 10)):
+        randomnum = random.randint(0, 10)
+        randomsize = random.randint(20, 60)
+        if randomnum < 7:
+            effectimg = random.choice(os.listdir(os.path.join(STATIC_DIR, "bricket-effects", "sparkles")))
+            effectimg = Image.open(os.path.join(STATIC_DIR, "bricket-effects", "sparkles", effectimg))
+        elif randomnum < 9:
+            effectimg = random.choice(os.listdir(os.path.join(STATIC_DIR, "bricket-effects", "hearts")))
+            effectimg = Image.open(os.path.join(STATIC_DIR, "bricket-effects", "hearts", effectimg))
+        else:
+            effectimg = random.choice(os.listdir(os.path.join(STATIC_DIR, "bricket-effects", "extra")))
+            effectimg = Image.open(os.path.join(STATIC_DIR, "bricket-effects", "extra", effectimg))
+        effectimg = effectimg.convert('RGBA').resize((randomsize, randomsize), resample=Image.LANCZOS)
+        img.paste(effectimg, (random.randint(10, 490), random.randint(10, 490)), mask=effectimg)
+
+    return image_response(img)
 ##  deprecated due to performance ##
 """@views.route('/the/<path:parseurl>')
 def the(parseurl):
