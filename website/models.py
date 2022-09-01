@@ -1,4 +1,4 @@
-import time
+from sqlalchemy import func
 from . import db
 from flask_login import UserMixin
 
@@ -7,7 +7,7 @@ from flask_login import UserMixin
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String(10000))
-    creation_date = db.Column(db.String, default=time.time())
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class User(db.Model, UserMixin):
@@ -16,6 +16,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     posts = db.relationship('Post')
-    creation_date = db.Column(db.String, default=time.time())
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
     pfp = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.String(150), nullable=True)

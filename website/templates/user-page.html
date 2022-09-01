@@ -24,7 +24,7 @@
         <button onclick="deletePost({{ Post.id }})", class="delete-button">delete</button>
         {% endif %}
       </div>
-      <a>from {{ load_user(Post.user_id).username }} at {{ Post.creation_date }}</a>
+      <a>from {{ load_user(Post.user_id).username }} at {{ Post.date }}</a>
       {% endfor %}
       <a href="/forum">refresh</a>
       <a align="center">{{ load_user(user_id).username }}'s posts</a>
@@ -39,7 +39,7 @@
         </form>
         {% endif %}
         <div class="user-profile-stats">
-          <a>Created on: {{ load_user(user_id).creation_date }}</a>
+          <a>Created on: {{ load_user(user_id).date }}</a>
           <a>{{ len(load_user(user_id).posts) }} Posts</a>
         </div>
       </div>
