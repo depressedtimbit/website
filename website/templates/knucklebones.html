@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+        {% block title %}
+        kuncklebones : room {{ room }}
+        {% endblock %} 
+{% block content %}
+
+<div class="knc-game-container">
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    container = document.getElementsByClassName('knc-game-container')
+    var socket = io();
+    var player = {{ username|tojson }}; 
+    socket.on('connect', function() {
+        socket.emit('joined', {Player: });
+        
+    });
+    socket.on('lobbyinfo', function(data) {
+        console.log(data);
+    
+    })
+</script>
+{% endblock %} 
