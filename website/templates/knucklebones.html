@@ -14,8 +14,9 @@
     container = document.getElementsByClassName('knc-game-container')
     var socket = io();
     var player = {{ username|tojson }}; 
+    var room = {{  room|tojson }};
     socket.on('connect', function() {
-        socket.emit('joined', {Player: });
+        socket.emit('joined', {Player: player, Room: room});
         
     });
     socket.on('lobbyinfo', function(data) {
