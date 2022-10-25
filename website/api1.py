@@ -1,9 +1,11 @@
+from time import sleep
 from flask import Blueprint, jsonify, redirect, request, abort, url_for
 from flask_cors import cross_origin
 from flask_login import current_user, login_required
+from numpy import isin
 from website import db
 from .models import Post, User
-
+from .utils import load_pfp_dir
 api = Blueprint('api1',__name__, subdomain='api',)
 
 
@@ -21,12 +23,15 @@ def posts():
     query = query.order_by(Post.id.desc())
 
     # TODO: check if `post_id` is in fact integer
+
     if post_id is not None:
-        query = query.filter_by(id=int(post_id))
+        if isinstance(post_id, int):
+            query = query.filter_by(id=int(post_id))
 
     # TODO: check if `user_id` is in fact integer
     if user_id is not None:
-        query = query.filter_by(user_id=int(user_id))
+        if isinstance(user_id, int):
+            query = query.filter_by(user_id=int(user_id))
 
     # TODO: check if `limit` is in fact integer
     if index is None:
@@ -38,16 +43,17 @@ def posts():
     query = query.offset(int(page) * int(index))
 
     if not query.all():
-        abort(404)
+        return jsonify("end of content")
 
     return jsonify([
         {
             'id': post.id,
             'data': post.data,
-            'date': post.date.timestamp(),
+            'date': post.date,
             'user_id': post.user_id,
-            'username': User.query.get(int(post.user_id)).username
-        }
+            'username': User.query.get(int(post.user_id)).username,
+            'pfp': load_pfp_dir(post.user_id)
+            }
         for post in query.all()
     ])
 
