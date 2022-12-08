@@ -1,11 +1,11 @@
-from time import sleep
 from flask import Blueprint, jsonify, redirect, request, abort, url_for
 from flask_cors import cross_origin
 from flask_login import current_user, login_required
-from numpy import isin
 from website import db
 from .models import Post, User
-from .utils import load_pfp_dir
+from .utils import load_pfp_dir, escape_html
+
+
 api = Blueprint('api1',__name__, subdomain='api',)
 
 
@@ -48,10 +48,10 @@ def posts():
     return jsonify([
         {
             'id': post.id,
-            'data': post.data,
+            'data': escape_html(post.data),
             'date': post.date,
             'user_id': post.user_id,
-            'username': User.query.get(int(post.user_id)).username,
+            'username': escape_html(User.query.get(int(post.user_id)).username),
             'pfp': load_pfp_dir(post.user_id)
             }
         for post in query.all()
