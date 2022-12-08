@@ -32,7 +32,7 @@ def Forum():
         if post is None or len(post) < 1:
             flash('post is too short!', category='error')
         else:
-            new_post = Post(data=secure(post), user_id=current_user.id)
+            new_post = Post(data=post, user_id=current_user.id)
             db.session.add(new_post)
             db.session.commit()
             flash('post added!', category='success')
