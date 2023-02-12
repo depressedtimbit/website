@@ -189,6 +189,14 @@ def brisket():
         img.paste(effectimg, (random.randint(10, 490), random.randint(10, 490)), mask=effectimg)
 
     return image_response(img)
+
+@views.route('/ihowl/download')
+def filedownload():
+    return send_file(f'{STATIC_DIR}/IHOWL.rar')
+
+@views.route('/ihowl/')
+def ihowl():
+    return render_template('ihowl.html')
 ##  deprecated due to performance ##
 """@views.route('/the/<path:parseurl>')
 def the(parseurl):
