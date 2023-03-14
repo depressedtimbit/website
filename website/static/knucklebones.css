@@ -7,3 +7,10 @@
     flex-direction: column;
     align-content: center;
 }
+
+.grid-container {
+    display:grid
+}
+.grid-item {
+    
+}

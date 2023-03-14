@@ -1,14 +1,14 @@
-container = document.getElementsByClassName('knc-game-container')[0]
-    
 
 
-    function init() {
+
+function init() {
+        container = document.getElementsByClassName('knc-game-container')[0]
         spawnMainMenu()
     }
 
     function spawnMainMenu() {
-      container.innerHTML = `
-    <h3 class="knc-title" align="center">⚅	⚅	⚅</h3>
+      container.innerHTML = 
+  `<h3 class="knc-title" align="center">⚅	⚅	⚅</h3>
     <h1 class="knc-title" align="center">Knucklebones</h1>
     <h3 class="knc-title" align="center">A Online game of risk and reward</h3>
 
