@@ -9,8 +9,36 @@
 }
 
 .grid-container {
-    display:grid
+    display: grid;
+    column-gap: 50px;
+    grid-template-columns: auto auto auto;
+    background-color: #9b6c40;
+    padding: 10px;
+
 }
-.grid-item {
+.game-flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.knc-player-title {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+
+}
+.block {
+    background-color: brown;
+    padding: 3px;
+}
+.knc-board {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+.score {
+    background-color: gray;
     
 }
