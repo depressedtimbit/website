@@ -18,3 +18,6 @@ class User(db.Model, UserMixin):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     pfp = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.String(150), nullable=True)
+
+
+    

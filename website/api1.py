@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, redirect, request, abort, url_for
 from flask_cors import cross_origin
 from flask_login import current_user, login_required
 from website import db
-from .models import Post, User
+from .models import Post, User, LeadboardEntry
 from .utils import load_pfp_dir, escape_html
 
 
@@ -58,6 +58,7 @@ def posts():
     ])
 
 @api.route('/forum/delete-post', methods=['POST'])
+@cross_origin("http://api.checkhost.local:5000/") 
 @login_required
 def delete_post():
     post_id = request.form.get('postid')
@@ -71,3 +72,4 @@ def delete_post():
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('views.Forum'))
+
