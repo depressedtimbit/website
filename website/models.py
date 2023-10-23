@@ -3,7 +3,6 @@ from . import db
 from flask_login import UserMixin
 
 
-
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String(10000))
@@ -19,3 +18,6 @@ class User(db.Model, UserMixin):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     pfp = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.String(150), nullable=True)
+
+
+    

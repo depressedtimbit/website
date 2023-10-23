@@ -1,30 +1,38 @@
-from typing import Optional
-from distutils.command.config import config
 from flask import Flask, render_template
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_caching import Cache
 from flask_sqlalchemy import SQLAlchemy
-from os import path
+import os 
+from dotenv import load_dotenv
 from flask_login import LoginManager
 
-db = SQLAlchemy()
-DB_NAME = "database.db"
-migrate = Migrate()
-cache = Cache()
+load_dotenv('config.env')
 
-website_url = 'checkhost.local:5000'
+db = SQLAlchemy()
+migrate = Migrate(compare_type=True)
+cache = Cache()
+cors = CORS()
+
+
+DB_NAME = os.getenv("ENV_WEBSITE_DB_NAME")
+DOMAIN = os.getenv("ENV_WEBSITE_DOMAIN")
+SECRET_KEY = os.getenv("ENV_WEBSITE_SECRET_KEY")
+
+
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+    app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'True'
     app.config["CACHE_TYPE"] = "SimpleCache"
     app.config["CACHE_DEFAULT_TIMEOUT"] = 300
-    app.config['SERVER_NAME'] = website_url
+    app.config['SERVER_NAME'] = DOMAIN
     db.init_app(app)
     migrate.init_app(app, db)
     cache.init_app(app)
+    cors.init_app(app)
 
     from .views import views
     from .auth import auth
@@ -39,7 +47,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(api, url_prefix='/v1')
 
-    from .models import User, Post
+   
 
     create_database(app)
 
@@ -47,35 +55,18 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    @login_manager.user_loader
-    def load_user(id_):
-        return User.query.get(int(id_))
+    from .utils import load_user
 
-    # FIXME: unused view?
-    def load_post(id_):
-        return Post.query.get(int(id_))
+    login_manager.user_loader(load_user)
+    
 
-    def load_posts(user: Optional[int]):
-        if user is None:
-            return Post.query.all()
-        else:
-            return Post.query.filter_by(user_id=user)
-
-    def load_pfp_dir(id_):
-        user = User.query.get(int(id_))
-        if user.pfp == None:
-            return "/static/pfps/default-pfp.png"
-        else:
-            return f'/static/pfps/custom/{user.pfp}'
-
-    app.jinja_env.globals.update(load_posts=load_posts, load_user=load_user, load_pfp_dir=load_pfp_dir, len=len)
 
     return app
 
 
 def create_database(app):
     print('Testing if Database exists')
-    if not path.exists('/var/www/website/website' + DB_NAME):
+    if not os.path.exists('/var/www/website/website' + DB_NAME):
         print('attemping to create Database')
         db.create_all(app=app)
         print('Created Database!')

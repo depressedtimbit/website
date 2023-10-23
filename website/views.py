@@ -1,9 +1,10 @@
 from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
+from flask_cors import cross_origin
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
 from website.utils import get_image, image_response, get_bottom_string, get_brisket_string
 from .models import Post, User
-from . import db
+from . import DOMAIN, db
 from . import cache
 import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
@@ -24,6 +25,7 @@ def home():
     return render_template("home.html", clientip=request.remote_addr)
 
 @views.route('/forum', methods=['GET', 'POST'])
+@cross_origin() 
 @login_required
 def Forum():
     if request.method == 'POST':
@@ -74,15 +76,6 @@ def upload_file():
 
                 return redirect(url_for('views.user', user_id="me"))
 
-@views.route('/delete-post', methods=['POST'])
-def delete_post():
-    post_id = request.form.get('postid')
-    if post_id is not None:
-        post = Post.query.get(int(post_id))
-        if post:
-            db.session.delete(post)
-            db.session.commit()
-    return redirect(url_for('views.Forum'))
 
 @views.route('/rcg/')
 def rcg():
