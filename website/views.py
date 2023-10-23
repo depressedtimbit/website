@@ -190,6 +190,11 @@ def brisket():
 
     return image_response(img)
 
+@views.route("/senko/")
+def senko():
+    senkoimg = random.choice(os.listdir(os.path.join(STATIC_DIR, "senkos")))
+    return image_response(Image.open(os.path.join(STATIC_DIR, "senkos", senkoimg)))
+
 @views.route('/ihowl/download')
 def filedownload():
     return send_file(f'{STATIC_DIR}/IHOWL.rar')
