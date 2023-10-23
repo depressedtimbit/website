@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+        rel="stylesheet"
+        href="\static\ihowl\ihowl.css"
+        />
+        
+
+        <title>IHOWL</title>
+    </head>
+
+    <div id="audio container" class="audiocontainer">
+        <audio id="audio" src="/static/ihowl/4mat  Eclipse.mp3" autoplay loop=true controls></audio>
+        <a class="audio-text">
+            if you're seeing this your browerser is gya<br>
+            just click play on the audio file
+        </a>
+    </div>
+
+
+    <body id="main.body">
+        <header class="header">
+            <img src="\static\ihowl\cooltext429467338620196.gif">
+        </header>
+        
+        <div class="main-div">
+            <img class="spinner-burg" src="/static/ihowl/IHOWL_logo.png">
+            <a href="\ihowl\download" style="display: flex; justify-content: center;">   
+                <img src="\static\ihowl\download_buttons_55810.jpg" style="max-width:25%; height:auto">
+            </a>
+            <img class="spinner-burg" src="/static/ihowl/IHOWL_logo.png">
+        </div>
+        
+        <footer class="footer">
+            <img src="/static/ihowl/cooltext429467662363683.gif">
+            <div>
+            <h class="audio-text">you are listening to</h> <a href="https://www.youtube.com/watch?v=XL8w8wWsfy4">4mat - Eclipse</a> <h1>(unrelated to project, temp music)</h1>
+        </div>
+        </footer>
+
+    </body>
+
+<script>
+    const Audio = document.getElementById("audio")
+    const Container = document.getElementById("audio container")
+    Audio.onplaying = function() {
+        Audio.hidden = true
+        Container.style.visibility = "hidden"
+    }
+    
+</script>
+</html>
