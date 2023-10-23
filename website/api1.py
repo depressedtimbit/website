@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, redirect, request, abort, url_for
 from flask_cors import cross_origin
 from flask_login import current_user, login_required
 from website import db
-from .models import Post, User, LeadboardEntry
+from .models import Post, User
 from .utils import load_pfp_dir, escape_html
 
 
