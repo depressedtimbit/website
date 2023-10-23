@@ -160,7 +160,9 @@ def brisket():
 
     canvas = ImageDraw.Draw(img)
     string = get_brisket_string()
-    w, h = canvas.textsize(string + "<3" , BRISKET_FONT)
+    l , t, r, b = canvas.textbbox((0,0), string + "<3" , BRISKET_FONT)
+    h = b + t
+    w = l + r
     h += int(h*0.21)
 
     canvas.text(((width-w)/2, ((height/3)-(h))/2), string + "<3", font=BRISKET_FONT, fill="pink", stroke_fill="black", stroke_width=2)
