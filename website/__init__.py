@@ -67,7 +67,7 @@ def create_app():
 def create_database(app):
     print('Testing if Database exists')
     DB_DIR = os.path.join(os.path.dirname(__file__), DB_NAME)
-    if not os.path.exists(DB_DIR):
-        print('attemping to create Database')
-        db.create_all(app=app)
-        print('Created Database!')
+    #if not os.path.exists(DB_DIR):
+    print('attemping to create Database')
+    db.create_all(app=app)
+    print('Created Database!')
