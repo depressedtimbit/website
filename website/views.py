@@ -1,4 +1,3 @@
-from turtle import width
 from flask import Blueprint, send_file, render_template, request, flash, url_for, abort
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
